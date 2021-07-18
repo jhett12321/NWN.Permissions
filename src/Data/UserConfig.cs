@@ -1,16 +1,19 @@
+using System;
 using System.Collections.Generic;
 
 namespace Jorteck.Permissions
 {
+  [Serializable]
   internal sealed class UserConfig
   {
     public const string ConfigName = "users.yml";
 
-    public Dictionary<string, UserEntry> UsersCd = new Dictionary<string, UserEntry>();
-    public Dictionary<string, UserEntry> UsersCharacter = new Dictionary<string, UserEntry>();
-    public Dictionary<string, UserEntry> UsersUsername = new Dictionary<string, UserEntry>();
+    public Dictionary<string, UserEntry> UsersCd { get; set; } = new Dictionary<string, UserEntry>();
+    public Dictionary<string, UserEntry> UsersCharacter { get; set; } = new Dictionary<string, UserEntry>();
+    public Dictionary<string, UserEntry> UsersUsername { get; set; } = new Dictionary<string, UserEntry>();
   }
 
+  [Serializable]
   internal sealed class UserEntry
   {
     public string LastUsername { get; set; }
