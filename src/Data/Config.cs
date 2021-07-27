@@ -1,5 +1,8 @@
+using System;
+
 namespace Jorteck.Permissions
 {
+  [Serializable]
   internal sealed class Config
   {
     public const string ConfigName = "config.yml";

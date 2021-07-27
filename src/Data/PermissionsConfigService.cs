@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Anvil;
 using Anvil.API;
 using Anvil.Services;
 using YamlDotNet.Serialization;
@@ -12,7 +10,7 @@ namespace Jorteck.Permissions
   [ServiceBinding(typeof(PermissionsConfigService))]
   public sealed class PermissionsConfigService
   {
-    private static readonly string PluginPath = Path.Combine(Path.GetDirectoryName(typeof(AnvilCore).Assembly.Location), "Plugins/NWN.Permissions");
+    private static readonly string PluginPath = Path.GetDirectoryName(typeof(PermissionsConfigService).Assembly.Location);
 
     private readonly IDeserializer deserializer = new DeserializerBuilder()
       .WithNamingConvention(UnderscoredNamingConvention.Instance)
@@ -22,9 +20,9 @@ namespace Jorteck.Permissions
       .WithNamingConvention(UnderscoredNamingConvention.Instance)
       .Build();
 
-    private List<GroupEntry> defaultGroups;
-    private List<GroupEntry> defaultDMGroups;
-    private Dictionary<NwPlayer, PermissionSet> cachedPermissions = new Dictionary<NwPlayer, PermissionSet>();
+    private readonly Dictionary<string, GroupEntry> defaultGroups = new Dictionary<string, GroupEntry>();
+    private readonly Dictionary<string, GroupEntry> defaultDMGroups = new Dictionary<string, GroupEntry>();
+    private readonly Dictionary<NwPlayer, PermissionSet> cachedPermissions = new Dictionary<NwPlayer, PermissionSet>();
 
     private Config config;
     private GroupConfig groupConfig;
@@ -35,7 +33,7 @@ namespace Jorteck.Permissions
       LoadAllConfigsFromDisk();
     }
 
-    public PermissionSet GetPermissionsForPlayer(NwPlayer player)
+    internal PermissionSet GetPermissionsForPlayer(NwPlayer player)
     {
       if (!cachedPermissions.TryGetValue(player, out PermissionSet permissionSet))
       {
@@ -46,11 +44,24 @@ namespace Jorteck.Permissions
       return permissionSet;
     }
 
+    internal IEnumerable<string> GetGroupsForPlayer(NwPlayer player, bool includeDefaultEntries)
+    {
+      UserEntry userEntry = ResolveUserEntry(player);
+      List<string> groups = includeDefaultEntries ? new List<string>(player.IsDM ? defaultDMGroups.Keys : defaultGroups.Keys) : new List<string>();
+
+      if (userEntry != null)
+      {
+        groups.AddRange(userEntry.Groups);
+      }
+
+      return groups;
+    }
+
     private PermissionSet CreatePermissionSet(NwPlayer player)
     {
       PermissionSet permissionSet = new PermissionSet();
       UserEntry userEntry = ResolveUserEntry(player);
-      List<GroupEntry> groupEntries = ResolveGroupEntries(player, userEntry);
+      IEnumerable<GroupEntry> groupEntries = ResolveGroupEntries(player, userEntry);
 
       if (userEntry != null)
       {
@@ -88,14 +99,14 @@ namespace Jorteck.Permissions
       return null;
     }
 
-    private List<GroupEntry> ResolveGroupEntries(NwPlayer player, UserEntry? userEntry)
+    private IEnumerable<GroupEntry> ResolveGroupEntries(NwPlayer player, UserEntry? userEntry)
     {
       if (userEntry == null)
       {
-        return !player.IsDM ? defaultGroups : defaultDMGroups;
+        return !player.IsDM ? defaultGroups.Values : defaultDMGroups.Values;
       }
 
-      List<GroupEntry> groupEntries = !player.IsDM ? new List<GroupEntry>(defaultGroups) : new List<GroupEntry>(defaultDMGroups);
+      List<GroupEntry> groupEntries = !player.IsDM ? new List<GroupEntry>(defaultGroups.Values) : new List<GroupEntry>(defaultDMGroups.Values);
       foreach (string groupName in userEntry.Groups)
       {
         if (groupConfig.Groups.TryGetValue(groupName, out GroupEntry groupEntry))
@@ -165,12 +176,12 @@ namespace Jorteck.Permissions
       {
         if (groupEntry.Value.Default)
         {
-          defaultGroups.Add(groupEntry.Value);
+          defaultGroups[groupEntry.Key] = groupEntry.Value;
         }
 
         if (groupEntry.Value.DefaultDm)
         {
-          defaultDMGroups.Add(groupEntry.Value);
+          defaultDMGroups[groupEntry.Key] = groupEntry.Value;
         }
       }
     }

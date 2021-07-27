@@ -24,7 +24,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NWN.Anvil" Version="8193.26.0-rc.1" ExcludeAssets="runtime" />
+        <PackageReference Include="NWN.Anvil" Version="8193.26.0-dev.15.b48cf825" ExcludeAssets="runtime" />
         <PackageReference Include="YamlDotNet" Version="11.2.1" />
     </ItemGroup>
 
