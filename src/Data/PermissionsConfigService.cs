@@ -24,9 +24,9 @@ namespace Jorteck.Permissions
     private readonly Dictionary<string, GroupEntry> defaultDMGroups = new Dictionary<string, GroupEntry>();
     private readonly Dictionary<NwPlayer, PermissionSet> cachedPermissions = new Dictionary<NwPlayer, PermissionSet>();
 
-    private Config config;
-    private GroupConfig groupConfig;
-    private UserConfig userConfig;
+    internal Config Config;
+    internal GroupConfig GroupConfig;
+    internal UserConfig UserConfig;
 
     public PermissionsConfigService()
     {
@@ -81,17 +81,17 @@ namespace Jorteck.Permissions
     {
       UserEntry userEntry;
 
-      if (userConfig.UsersCd.TryGetValue(player.CDKey, out userEntry))
+      if (UserConfig.UsersCd.TryGetValue(player.CDKey, out userEntry))
       {
         return userEntry;
       }
 
-      if (userConfig.UsersCharacter.TryGetValue(player.LoginCreature.UUID.ToUUIDString(), out userEntry))
+      if (UserConfig.UsersCharacter.TryGetValue(player.LoginCreature.UUID.ToUUIDString(), out userEntry))
       {
         return userEntry;
       }
 
-      if (userConfig.UsersUsername.TryGetValue(player.PlayerName, out userEntry))
+      if (UserConfig.UsersUsername.TryGetValue(player.PlayerName, out userEntry))
       {
         return userEntry;
       }
@@ -109,7 +109,7 @@ namespace Jorteck.Permissions
       List<GroupEntry> groupEntries = !player.IsDM ? new List<GroupEntry>(defaultGroups.Values) : new List<GroupEntry>(defaultDMGroups.Values);
       foreach (string groupName in userEntry.Groups)
       {
-        if (groupConfig.Groups.TryGetValue(groupName, out GroupEntry groupEntry))
+        if (GroupConfig.Groups.TryGetValue(groupName, out GroupEntry groupEntry))
         {
           AddInheritedGroups(groupEntries, groupEntry);
           groupEntries.Add(groupEntry);
@@ -123,7 +123,7 @@ namespace Jorteck.Permissions
     {
       foreach (string groupName in groupEntry.Inheritance)
       {
-        if (groupConfig.Groups.TryGetValue(groupName, out GroupEntry inheritedGroup))
+        if (GroupConfig.Groups.TryGetValue(groupName, out GroupEntry inheritedGroup))
         {
           AddInheritedGroups(destination, inheritedGroup);
           destination.Add(inheritedGroup);
@@ -172,7 +172,7 @@ namespace Jorteck.Permissions
       cachedPermissions.Clear();
       defaultDMGroups.Clear();
 
-      foreach (KeyValuePair<string,GroupEntry> groupEntry in groupConfig.Groups)
+      foreach (KeyValuePair<string,GroupEntry> groupEntry in GroupConfig.Groups)
       {
         if (groupEntry.Value.Default)
         {
@@ -188,9 +188,9 @@ namespace Jorteck.Permissions
 
     private void LoadAllConfigsFromDisk()
     {
-      config = LoadConfig<Config>(Config.ConfigName);
-      groupConfig = LoadConfig<GroupConfig>(GroupConfig.ConfigName);
-      userConfig = LoadConfig<UserConfig>(UserConfig.ConfigName);
+      Config = LoadConfig<Config>(Config.ConfigName);
+      GroupConfig = LoadConfig<GroupConfig>(GroupConfig.ConfigName);
+      UserConfig = LoadConfig<UserConfig>(UserConfig.ConfigName);
       Refresh();
     }
 

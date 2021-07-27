@@ -25,7 +25,7 @@ namespace Jorteck.Permissions
 
       if (eventData.ChatChannel == ChatChannel.PlayerShout || eventData.ChatChannel == ChatChannel.DmShout)
       {
-        if (!permissionsService.HasPermission(player, PermissionConstants.ChatShout))
+        if (!permissionsService.HasPermission(player, DMPermissionConstants.ChatShout))
         {
           eventData.Skip = true;
           ShowNoPermissionError(player);

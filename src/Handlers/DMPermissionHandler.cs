@@ -14,9 +14,9 @@ namespace Jorteck.Permissions
       this.permissionsService = permissionsService;
 
       NwModule module = NwModule.Instance;
-      module.OnDMGiveXP += eventData => OnDMGive(eventData, PermissionConstants.DMGiveXp);
-      module.OnDMGiveLevel += eventData => OnDMGive(eventData, PermissionConstants.DMGiveLevel);
-      module.OnDMGiveGold += eventData => OnDMGive(eventData, PermissionConstants.DMGiveGold);
+      module.OnDMGiveXP += eventData => OnDMGive(eventData, DMPermissionConstants.DMGiveXp);
+      module.OnDMGiveLevel += eventData => OnDMGive(eventData, DMPermissionConstants.DMGiveLevel);
+      module.OnDMGiveGold += eventData => OnDMGive(eventData, DMPermissionConstants.DMGiveGold);
       module.OnDMGiveAlignment += OnDMGiveAlignment;
       module.OnDMGiveItemBefore += OnDMGiveItemBefore;
 
@@ -24,35 +24,35 @@ namespace Jorteck.Permissions
       module.OnDMPlayerDMLogout += OnPlayerDMLogout;
       module.OnClientEnter += OnClientEnter;
 
-      module.OnDMHeal += eventData => OnDMGroupTarget(eventData, PermissionConstants.DMHeal);
-      module.OnDMKill += eventData => OnDMGroupTarget(eventData, PermissionConstants.DMKill);
-      module.OnDMToggleInvulnerable += eventData => OnDMGroupTarget(eventData, PermissionConstants.DMInvulnerable);
-      module.OnDMForceRest += eventData => OnDMGroupTarget(eventData, PermissionConstants.DMForceRest);
-      module.OnDMToggleImmortal += eventData => OnDMGroupTarget(eventData, PermissionConstants.DMImmortal);
-      module.OnDMLimbo += eventData => OnDMGroupTarget(eventData, PermissionConstants.DMLimbo);
-      module.OnDMToggleAI += eventData => OnDMGroupTarget(eventData, PermissionConstants.DMToggleAI);
+      module.OnDMHeal += eventData => OnDMGroupTarget(eventData, DMPermissionConstants.DMHeal);
+      module.OnDMKill += eventData => OnDMGroupTarget(eventData, DMPermissionConstants.DMKill);
+      module.OnDMToggleInvulnerable += eventData => OnDMGroupTarget(eventData, DMPermissionConstants.DMInvulnerable);
+      module.OnDMForceRest += eventData => OnDMGroupTarget(eventData, DMPermissionConstants.DMForceRest);
+      module.OnDMToggleImmortal += eventData => OnDMGroupTarget(eventData, DMPermissionConstants.DMImmortal);
+      module.OnDMLimbo += eventData => OnDMGroupTarget(eventData, DMPermissionConstants.DMLimbo);
+      module.OnDMToggleAI += eventData => OnDMGroupTarget(eventData, DMPermissionConstants.DMToggleAI);
 
-      module.OnDMGoTo += eventData => OnDMSingleTarget(eventData, PermissionConstants.DMGoTo);
-      module.OnDMPossess += eventData => OnDMSingleTarget(eventData, PermissionConstants.DMPossess);
-      module.OnDMPossessFullPower += eventData => OnDMSingleTarget(eventData, PermissionConstants.DMPossessFullPower);
-      module.OnDMToggleLock += eventData => OnDMSingleTarget(eventData, PermissionConstants.DMToggleLock);
-      module.OnDMDisableTrap += eventData => OnDMSingleTarget(eventData, PermissionConstants.DMDisableTrap);
+      module.OnDMGoTo += eventData => OnDMSingleTarget(eventData, DMPermissionConstants.DMGoTo);
+      module.OnDMPossess += eventData => OnDMSingleTarget(eventData, DMPermissionConstants.DMPossess);
+      module.OnDMPossessFullPower += eventData => OnDMSingleTarget(eventData, DMPermissionConstants.DMPossessFullPower);
+      module.OnDMToggleLock += eventData => OnDMSingleTarget(eventData, DMPermissionConstants.DMToggleLock);
+      module.OnDMDisableTrap += eventData => OnDMSingleTarget(eventData, DMPermissionConstants.DMDisableTrap);
 
-      module.OnDMAppear += eventData => OnDMStandardEvent(eventData, PermissionConstants.DMAppear);
-      module.OnDMDisappear += eventData => OnDMStandardEvent(eventData, PermissionConstants.DMDisappear);
-      module.OnDMSetFaction += eventData => OnDMStandardEvent(eventData, PermissionConstants.DMSetFaction);
-      module.OnDMGetFactionReputation += eventData => OnDMStandardEvent(eventData, PermissionConstants.DMGetFactionReputation);
-      module.OnDMSetFactionReputation += eventData => OnDMStandardEvent(eventData, PermissionConstants.DMSetFactionReputation);
-      module.OnDMTakeItem += eventData => OnDMStandardEvent(eventData, PermissionConstants.DMTakeItem);
-      module.OnDMSetStat += eventData => OnDMStandardEvent(eventData, PermissionConstants.DMSetStat);
-      module.OnDMSetTime += eventData => OnDMStandardEvent(eventData, PermissionConstants.DMSetTime);
-      module.OnDMSetDate += eventData => OnDMStandardEvent(eventData, PermissionConstants.DMSetDate);
-      module.OnDMGetVariable += eventData => OnDMStandardEvent(eventData, PermissionConstants.DMGetLocal);
-      module.OnDMSetVariable += eventData => OnDMStandardEvent(eventData, PermissionConstants.DMSetLocal);
+      module.OnDMAppear += eventData => OnDMStandardEvent(eventData, DMPermissionConstants.DMAppear);
+      module.OnDMDisappear += eventData => OnDMStandardEvent(eventData, DMPermissionConstants.DMDisappear);
+      module.OnDMSetFaction += eventData => OnDMStandardEvent(eventData, DMPermissionConstants.DMSetFaction);
+      module.OnDMGetFactionReputation += eventData => OnDMStandardEvent(eventData, DMPermissionConstants.DMGetFactionReputation);
+      module.OnDMSetFactionReputation += eventData => OnDMStandardEvent(eventData, DMPermissionConstants.DMSetFactionReputation);
+      module.OnDMTakeItem += eventData => OnDMStandardEvent(eventData, DMPermissionConstants.DMTakeItem);
+      module.OnDMSetStat += eventData => OnDMStandardEvent(eventData, DMPermissionConstants.DMSetStat);
+      module.OnDMSetTime += eventData => OnDMStandardEvent(eventData, DMPermissionConstants.DMSetTime);
+      module.OnDMSetDate += eventData => OnDMStandardEvent(eventData, DMPermissionConstants.DMSetDate);
+      module.OnDMGetVariable += eventData => OnDMStandardEvent(eventData, DMPermissionConstants.DMGetLocal);
+      module.OnDMSetVariable += eventData => OnDMStandardEvent(eventData, DMPermissionConstants.DMSetLocal);
       module.OnDMDumpLocals += OnDMDumpLocals;
 
-      module.OnDMJumpToPoint += eventData => OnDMTeleport(eventData, PermissionConstants.DMJump + PermissionConstants.TargetSelf);
-      module.OnDMJumpAllPlayersToPoint += eventData => OnDMTeleport(eventData, PermissionConstants.DMJumpAllPlayers);
+      module.OnDMJumpToPoint += eventData => OnDMTeleport(eventData, DMPermissionConstants.DMJump + DMPermissionConstants.TargetSelf);
+      module.OnDMJumpAllPlayersToPoint += eventData => OnDMTeleport(eventData, DMPermissionConstants.DMJumpAllPlayers);
       module.OnDMJumpTargetToPoint += OnDMJumpTargetToPoint;
 
       module.OnDMChangeDifficulty += OnDMChangeDifficulty;
@@ -63,7 +63,7 @@ namespace Jorteck.Permissions
 
     private void OnClientEnter(ModuleEvents.OnClientEnter eventData)
     {
-      if (permissionsService.HasPermission(eventData.Player, PermissionConstants.PlayerDMForceLogin))
+      if (permissionsService.HasPermission(eventData.Player, DMPermissionConstants.PlayerDMForceLogin))
       {
         eventData.Player.IsPlayerDM = true;
       }
@@ -71,7 +71,7 @@ namespace Jorteck.Permissions
 
     private void OnPlayerDMLogin(OnDMPlayerDMLogin eventData)
     {
-      if (!permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.PlayerDMLogin))
+      if (!permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.PlayerDMLogin))
       {
         eventData.Skip = true;
         ShowNoPermissionError(eventData.DungeonMaster);
@@ -80,7 +80,7 @@ namespace Jorteck.Permissions
 
     private void OnPlayerDMLogout(OnDMPlayerDMLogout eventData)
     {
-      if (!permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.PlayerDMLogout))
+      if (!permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.PlayerDMLogout))
       {
         eventData.Skip = true;
         ShowNoPermissionError(eventData.DungeonMaster);
@@ -89,13 +89,13 @@ namespace Jorteck.Permissions
 
     private void OnDMGiveItemBefore(OnDMGiveItemBefore eventData)
     {
-      if (!permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMGiveItem))
+      if (!permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMGiveItem))
       {
         eventData.Skip = true;
         ShowNoPermissionError(eventData.DungeonMaster);
       }
 
-      if (!HasPermissionToTarget(eventData.DungeonMaster, eventData.Target, PermissionConstants.DMGiveItem))
+      if (!HasPermissionToTarget(eventData.DungeonMaster, eventData.Target, DMPermissionConstants.DMGiveItem))
       {
         eventData.Skip = true;
         ShowNoPermissionError(eventData.DungeonMaster);
@@ -104,13 +104,13 @@ namespace Jorteck.Permissions
 
     private void OnDMDumpLocals(OnDMDumpLocals eventData)
     {
-      if (!permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMDumpLocals))
+      if (!permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMDumpLocals))
       {
         eventData.Skip = true;
         ShowNoPermissionError(eventData.DungeonMaster);
       }
 
-      if (!HasPermissionToTarget(eventData.DungeonMaster, eventData.Target, PermissionConstants.DMDumpLocals))
+      if (!HasPermissionToTarget(eventData.DungeonMaster, eventData.Target, DMPermissionConstants.DMDumpLocals))
       {
         eventData.Skip = true;
         ShowNoPermissionError(eventData.DungeonMaster);
@@ -134,12 +134,12 @@ namespace Jorteck.Permissions
 
     private void OnDMGiveAlignment(OnDMGiveAlignment eventData)
     {
-      if (permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMGiveAlignment))
+      if (permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMGiveAlignment))
       {
         return;
       }
 
-      if (!HasPermissionToTarget(eventData.DungeonMaster, eventData.Target, PermissionConstants.DMGiveAlignment))
+      if (!HasPermissionToTarget(eventData.DungeonMaster, eventData.Target, DMPermissionConstants.DMGiveAlignment))
       {
         eventData.Skip = true;
         ShowNoPermissionError(eventData.DungeonMaster);
@@ -198,14 +198,14 @@ namespace Jorteck.Permissions
 
     private void OnDMJumpTargetToPoint(OnDMJumpTargetToPoint eventData)
     {
-      if (permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMJump))
+      if (permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMJump))
       {
         return;
       }
 
       foreach (NwGameObject target in eventData.Targets)
       {
-        if (!HasPermissionToTarget(eventData.DungeonMaster, target, PermissionConstants.DMJump))
+        if (!HasPermissionToTarget(eventData.DungeonMaster, target, DMPermissionConstants.DMJump))
         {
           eventData.Skip = true;
           ShowNoPermissionError(eventData.DungeonMaster);
@@ -216,7 +216,7 @@ namespace Jorteck.Permissions
 
     private void OnDMChangeDifficulty(OnDMChangeDifficulty eventData)
     {
-      if (!permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMChangeDifficulty))
+      if (!permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMChangeDifficulty))
       {
         eventData.Skip = true;
         ShowNoPermissionError(eventData.DungeonMaster);
@@ -225,12 +225,12 @@ namespace Jorteck.Permissions
 
     private void OnDMViewInventory(OnDMViewInventory eventData)
     {
-      if (permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMViewInventory))
+      if (permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMViewInventory))
       {
         return;
       }
 
-      if (!HasPermissionToTarget(eventData.DungeonMaster, eventData.Target, PermissionConstants.DMViewInventory))
+      if (!HasPermissionToTarget(eventData.DungeonMaster, eventData.Target, DMPermissionConstants.DMViewInventory))
       {
         eventData.Skip = true;
         ShowNoPermissionError(eventData.DungeonMaster);
@@ -239,21 +239,21 @@ namespace Jorteck.Permissions
 
     private void OnDMSpawnObject(OnDMSpawnObjectBefore eventData)
     {
-      if (permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMSpawn))
+      if (permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMSpawn))
       {
         return;
       }
 
       bool hasPermission = eventData.ObjectType switch
       {
-        ObjectTypes.Creature => permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMSpawn + PermissionConstants.TargetCreature),
-        ObjectTypes.Item => permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMSpawn + PermissionConstants.TargetItem),
-        ObjectTypes.Trigger => permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMSpawn + PermissionConstants.TargetTrigger),
-        ObjectTypes.Door => permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMSpawn + PermissionConstants.TargetDoor),
-        ObjectTypes.Waypoint => permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMSpawn + PermissionConstants.TargetWaypoint),
-        ObjectTypes.Placeable => permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMSpawn + PermissionConstants.TargetPlaceable),
-        ObjectTypes.Store => permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMSpawn + PermissionConstants.TargetStore),
-        ObjectTypes.Encounter => permissionsService.HasPermission(eventData.DungeonMaster, PermissionConstants.DMSpawn + PermissionConstants.TargetEncounter),
+        ObjectTypes.Creature => permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMSpawn + DMPermissionConstants.TargetCreature),
+        ObjectTypes.Item => permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMSpawn + DMPermissionConstants.TargetItem),
+        ObjectTypes.Trigger => permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMSpawn + DMPermissionConstants.TargetTrigger),
+        ObjectTypes.Door => permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMSpawn + DMPermissionConstants.TargetDoor),
+        ObjectTypes.Waypoint => permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMSpawn + DMPermissionConstants.TargetWaypoint),
+        ObjectTypes.Placeable => permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMSpawn + DMPermissionConstants.TargetPlaceable),
+        ObjectTypes.Store => permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMSpawn + DMPermissionConstants.TargetStore),
+        ObjectTypes.Encounter => permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMSpawn + DMPermissionConstants.TargetEncounter),
         _ => false,
       };
 
@@ -266,8 +266,8 @@ namespace Jorteck.Permissions
 
     private bool HasPermissionToTarget(NwPlayer dungeonMaster, NwObject target, string permissionBase)
     {
-      bool targetSelf = permissionsService.HasPermission(dungeonMaster, permissionBase + PermissionConstants.TargetSelf);
-      bool targetPlayer = permissionsService.HasPermission(dungeonMaster, permissionBase + PermissionConstants.TargetPlayer);
+      bool targetSelf = permissionsService.HasPermission(dungeonMaster, permissionBase + DMPermissionConstants.TargetSelf);
+      bool targetPlayer = permissionsService.HasPermission(dungeonMaster, permissionBase + DMPermissionConstants.TargetPlayer);
 
       NwCreature dmCreature = dungeonMaster.ControlledCreature;
 
@@ -283,12 +283,12 @@ namespace Jorteck.Permissions
 
       return target switch
       {
-        NwCreature => permissionsService.HasPermission(dungeonMaster, permissionBase + PermissionConstants.TargetCreature),
-        NwItem => permissionsService.HasPermission(dungeonMaster, permissionBase + PermissionConstants.TargetItem),
-        NwEncounter => permissionsService.HasPermission(dungeonMaster, permissionBase + PermissionConstants.TargetEncounter),
-        NwWaypoint => permissionsService.HasPermission(dungeonMaster, permissionBase + PermissionConstants.TargetWaypoint),
-        NwTrigger => permissionsService.HasPermission(dungeonMaster, permissionBase + PermissionConstants.TargetTrigger),
-        NwPlaceable => permissionsService.HasPermission(dungeonMaster, permissionBase + PermissionConstants.TargetPlaceable),
+        NwCreature => permissionsService.HasPermission(dungeonMaster, permissionBase + DMPermissionConstants.TargetCreature),
+        NwItem => permissionsService.HasPermission(dungeonMaster, permissionBase + DMPermissionConstants.TargetItem),
+        NwEncounter => permissionsService.HasPermission(dungeonMaster, permissionBase + DMPermissionConstants.TargetEncounter),
+        NwWaypoint => permissionsService.HasPermission(dungeonMaster, permissionBase + DMPermissionConstants.TargetWaypoint),
+        NwTrigger => permissionsService.HasPermission(dungeonMaster, permissionBase + DMPermissionConstants.TargetTrigger),
+        NwPlaceable => permissionsService.HasPermission(dungeonMaster, permissionBase + DMPermissionConstants.TargetPlaceable),
         _ => false,
       };
     }
