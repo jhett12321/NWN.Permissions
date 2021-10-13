@@ -34,10 +34,10 @@ namespace Jorteck.Permissions
 
     // DM Multi Object Powers
     public const string DMHeal = "dm.heal";
-    public const string DMKill = "dm.kill.self";
-    public const string DMInvulnerable = "dm.invulnerable.self";
-    public const string DMForceRest = "dm.forcerest.self";
-    public const string DMImmortal = "dm.immortal.self";
+    public const string DMKill = "dm.kill";
+    public const string DMInvulnerable = "dm.invulnerable";
+    public const string DMForceRest = "dm.forcerest";
+    public const string DMImmortal = "dm.immortal";
     public const string DMLimbo = "dm.limbo";
     public const string DMToggleAI = "dm.toggleai";
 

@@ -1,15 +1,12 @@
 using System.Collections.Generic;
 using Anvil.API;
 using Anvil.Services;
-using NLog;
 
 namespace Jorteck.Permissions
 {
   [ServiceBinding(typeof(PermissionsService))]
   public sealed class PermissionsService
   {
-    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
-
     private readonly PermissionsConfigService permissionsConfigService;
 
     public PermissionsService(PermissionsConfigService permissionsConfigService)

@@ -4,12 +4,12 @@ using Anvil.Services;
 
 namespace Jorteck.Permissions
 {
-  [ServiceBinding(typeof(ChatHandler))]
-  internal sealed class ChatHandler
+  [ServiceBinding(typeof(ChatShoutPermissionHandler))]
+  internal sealed class ChatShoutPermissionHandler
   {
     private readonly PermissionsService permissionsService;
 
-    public ChatHandler(PermissionsService permissionsService)
+    public ChatShoutPermissionHandler(PermissionsService permissionsService)
     {
       this.permissionsService = permissionsService;
 
