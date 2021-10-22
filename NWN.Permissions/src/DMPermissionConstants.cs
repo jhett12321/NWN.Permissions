@@ -57,7 +57,7 @@ namespace Jorteck.Permissions
 
     // DM Local Variables
     public const string DMGetLocal = "dm.local.get";
-    public const string DMSetLocal= "dm.local.set";
+    public const string DMSetLocal = "dm.local.set";
     public const string DMDumpLocals = "dm.local.dump";
 
     // DM Commands
