@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using Anvil.API;
+using Anvil.Services;
 
 namespace Jorteck.Permissions
 {
   internal class UserAddGroupCommand : ICommand
   {
     private readonly PermissionsConfigService permissionsConfigService;
+    private readonly CursorTargetService cursorTargetService;
 
     public string Command { get; }
     public string Permission { get; }
@@ -12,9 +15,11 @@ namespace Jorteck.Permissions
     public string Description { get; }
     public string[] Usages { get; }
 
-    public UserAddGroupCommand(PermissionsConfigService permissionsConfigService)
+    public UserAddGroupCommand(PermissionsConfigService permissionsConfigService, CursorTargetService cursorTargetService)
     {
       this.permissionsConfigService = permissionsConfigService;
+      this.cursorTargetService = cursorTargetService;
+
       Command = "group adduser";
       Permission = PermissionConstants.UserAddGroup;
       ArgCount = null;
@@ -25,9 +30,9 @@ namespace Jorteck.Permissions
       };
     }
 
-    public void ProcessCommand(NwPlayer caller, string[] args)
+    public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
-
+      string group = args[0];
     }
   }
 }

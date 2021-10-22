@@ -7,7 +7,7 @@ using Anvil.API.Events;
 
 namespace Jorteck.Permissions
 {
-  internal class PermissionsChatCommandService
+  internal sealed class PermissionsChatCommandService
   {
     private readonly PermissionsService permissionsService;
     private readonly PermissionsConfigService configService;
@@ -114,7 +114,7 @@ namespace Jorteck.Permissions
         .ToArray();
     }
 
-    private void TryExecuteCommand(NwPlayer sender, ICommand command, IReadOnlyCollection<string> args)
+    private void TryExecuteCommand(NwPlayer sender, ICommand command, IReadOnlyList<string> args)
     {
       if (!permissionsService.HasPermission(sender, command.Permission))
       {
@@ -124,10 +124,10 @@ namespace Jorteck.Permissions
 
       if (command.ArgCount.HasValue && command.ArgCount != args.Count)
       {
-
+        ShowCommandHelpToPlayer(sender, command);
       }
 
-
+      command.ProcessCommand(sender, args);
     }
 
     private void ShowNoPermissionError(NwPlayer player)

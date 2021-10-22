@@ -77,11 +77,9 @@ namespace Jorteck.Permissions
       return permissionSet;
     }
 
-    private UserEntry? ResolveUserEntry(NwPlayer player)
+    private UserEntry ResolveUserEntry(NwPlayer player)
     {
-      UserEntry userEntry;
-
-      if (UserConfig.UsersCd.TryGetValue(player.CDKey, out userEntry))
+      if (UserConfig.UsersCd.TryGetValue(player.CDKey, out UserEntry userEntry))
       {
         return userEntry;
       }
@@ -99,7 +97,7 @@ namespace Jorteck.Permissions
       return null;
     }
 
-    private IEnumerable<GroupEntry> ResolveGroupEntries(NwPlayer player, UserEntry? userEntry)
+    private IEnumerable<GroupEntry> ResolveGroupEntries(NwPlayer player, UserEntry userEntry)
     {
       if (userEntry == null)
       {

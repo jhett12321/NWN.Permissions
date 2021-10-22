@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Anvil.API;
 
 namespace Jorteck.Permissions
@@ -28,7 +29,7 @@ namespace Jorteck.Permissions
       };
     }
 
-    public void ProcessCommand(NwPlayer caller, string[] args)
+    public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
       string specifiedCommand = string.Join(" ", args);
       ICommand command = chatCommandService.Value.GetCommand(specifiedCommand);
@@ -38,7 +39,7 @@ namespace Jorteck.Permissions
         caller.SendServerMessage($"Unknown Command {specifiedCommand}.", ColorConstants.Red);
       }
 
-      if (args.Length == 0 || command == null)
+      if (args.Count == 0 || command == null)
       {
         chatCommandService.Value.ShowAvailableCommandsToPlayer(caller);
       }

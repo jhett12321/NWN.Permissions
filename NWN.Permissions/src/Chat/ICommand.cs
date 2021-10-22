@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Anvil.API;
 
 namespace Jorteck.Permissions
@@ -34,6 +35,6 @@ namespace Jorteck.Permissions
     /// </summary>
     /// <param name="caller">The calling player of this command.</param>
     /// <param name="args">Any additional arguments specified.</param>
-    void ProcessCommand(NwPlayer caller, string[] args);
+    void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args);
   }
 }
