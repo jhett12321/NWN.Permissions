@@ -12,6 +12,8 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <EnableDynamicLoading>true</EnableDynamicLoading>
 
+    <NoWarn>1591</NoWarn>
+
     <RootNamespace>Jorteck.Permissions</RootNamespace>
   </PropertyGroup>
 
