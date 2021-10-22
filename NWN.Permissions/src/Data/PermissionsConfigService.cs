@@ -170,7 +170,7 @@ namespace Jorteck.Permissions
       cachedPermissions.Clear();
       defaultDMGroups.Clear();
 
-      foreach (KeyValuePair<string,GroupEntry> groupEntry in GroupConfig.Groups)
+      foreach (KeyValuePair<string, GroupEntry> groupEntry in GroupConfig.Groups)
       {
         if (groupEntry.Value.Default)
         {
