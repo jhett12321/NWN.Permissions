@@ -1,14 +1,46 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+  <!--Build-->
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>9</LangVersion>
+    <LangVersion>9.0</LangVersion>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+
     <RootNamespace>Jorteck.Permissions</RootNamespace>
+  </PropertyGroup>
+
+  <!--Package-->
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+    <PackageId>$(AssemblyName)</PackageId>
+    <Authors>Jorteck</Authors>
+
+    <RepositoryUrl>https://github.com/Jorteck/NWN.Permissions</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <Description>
+      NWN.Permissions is a configurable and extensible permissions plugin for Anvil-based Neverwinter Nights servers that allows server admins to control abilities, commands and features for players and dungeon masters alike.
+    </Description>
+
+    <PackageTags>Neverwinter Nights;NWN;</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <!--Debug/Source Link-->
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <DebugSymbols>true</DebugSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
