@@ -58,12 +58,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NWN.Anvil" Version="8193.33.1" ExcludeAssets="runtime" />
-    <PackageReference Include="YamlDotNet" Version="11.2.1" />
+    <PackageReference Include="NWN.Anvil" Version="8193.33.2-dev.5.9e782386" ExcludeAssets="runtime" PrivateAssets="All" />
+    <PackageReference Include="YamlDotNet" Version="11.2.1" PrivateAssets="All" />
   </ItemGroup>
 
   <Target Name="ZipOutputPath" AfterTargets="Build">
-    <ZipDirectory Overwrite="true" SourceDirectory="$(OutputPath)" DestinationFile="$(OutputPath)\..\$(MSBuildProjectName).zip"/>
+    <ZipDirectory Overwrite="true" SourceDirectory="$(OutputPath)" DestinationFile="$(OutputPath)\..\$(MSBuildProjectName).zip" />
   </Target>
 
 </Project>
