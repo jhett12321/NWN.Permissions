@@ -22,9 +22,7 @@ namespace Jorteck.Permissions
           DefaultDm = true,
           Permissions = new List<string>
           {
-            "permissions.*",
-            "dm.*",
-            "chat.*",
+            "*",
           },
         }
       },
