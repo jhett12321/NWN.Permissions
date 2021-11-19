@@ -10,7 +10,7 @@ namespace Jorteck.Permissions
   [ServiceBinding(typeof(PermissionsConfigService))]
   public sealed class PermissionsConfigService
   {
-    private static readonly string PluginPath = Path.GetDirectoryName(typeof(PermissionsConfigService).Assembly.Location);
+    private readonly string pluginStoragePath;
 
     private readonly IDeserializer deserializer = new DeserializerBuilder()
       .WithNamingConvention(UnderscoredNamingConvention.Instance)
@@ -28,8 +28,9 @@ namespace Jorteck.Permissions
     internal GroupConfig GroupConfig;
     internal UserConfig UserConfig;
 
-    public PermissionsConfigService()
+    public PermissionsConfigService(PluginStorageService pluginStorageService)
     {
+      pluginStoragePath = pluginStorageService.GetPluginStoragePath(typeof(PermissionsConfigService).Assembly);
       LoadAllConfigsFromDisk();
     }
 
@@ -218,7 +219,7 @@ namespace Jorteck.Permissions
 
     private string GetConfigPath(string fileName)
     {
-      return Path.Combine(PluginPath, fileName);
+      return Path.Combine(pluginStoragePath, fileName);
     }
   }
 }
