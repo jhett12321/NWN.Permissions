@@ -28,7 +28,7 @@ namespace Jorteck.Permissions
     /// <summary>
     /// Gets a list of example usages for this command.
     /// </summary>
-    string[] Usages { get; }
+    CommandUsage[] Usages { get; }
 
     /// <summary>
     /// Process this command with the specified arguments.

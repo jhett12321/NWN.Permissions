@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Anvil.API;
@@ -56,6 +57,27 @@ namespace Jorteck.Permissions
       }
 
       return groups;
+    }
+
+    internal void UpdateConfig(Action<Config> transaction)
+    {
+      transaction(Config);
+      SaveConfig(Config.ConfigName, Config);
+      Refresh();
+    }
+
+    internal void UpdateGroupConfig(Action<GroupConfig> transaction)
+    {
+      transaction(GroupConfig);
+      SaveConfig(GroupConfig.ConfigName, Config);
+      Refresh();
+    }
+
+    internal void UpdateUserConfig(Action<UserConfig> transaction)
+    {
+      transaction(UserConfig);
+      SaveConfig(UserConfig.ConfigName, UserConfig);
+      Refresh();
     }
 
     private PermissionSet CreatePermissionSet(NwPlayer player)

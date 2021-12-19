@@ -4,18 +4,20 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Anvil.API;
 using Anvil.API.Events;
+using Anvil.Services;
 
 namespace Jorteck.Permissions
 {
+  [ServiceBinding(typeof(PermissionsChatCommandService))]
   internal sealed class PermissionsChatCommandService
   {
     private readonly PermissionsService permissionsService;
     private readonly PermissionsConfigService configService;
-    private readonly CommandHelpRenderer commandHelpRenderer;
 
     private readonly List<ICommand> commands;
+    private readonly HelpCommand helpCommand;
 
-    public PermissionsChatCommandService(PermissionsService permissionsService, PermissionsConfigService configService, CommandHelpRenderer commandHelpRenderer, IEnumerable<ICommand> commands)
+    public PermissionsChatCommandService(PermissionsService permissionsService, PermissionsConfigService configService, IEnumerable<ICommand> commands, HelpCommand helpCommand)
     {
       if (!configService.Config.ChatCommandEnable)
       {
@@ -24,48 +26,10 @@ namespace Jorteck.Permissions
 
       this.permissionsService = permissionsService;
       this.configService = configService;
-      this.commandHelpRenderer = commandHelpRenderer;
-
       this.commands = commands.ToList();
+      this.helpCommand = helpCommand;
 
       NwModule.Instance.OnChatMessageSend += OnChatMessageSend;
-    }
-
-    public IEnumerable<ICommand> GetAvailableCommands(NwPlayer player)
-    {
-      foreach (ICommand command in commands)
-      {
-        if (permissionsService.HasPermission(player, command.Permission))
-        {
-          yield return command;
-        }
-      }
-    }
-
-    public ICommand GetCommand(string commandName)
-    {
-      foreach (ICommand command in commands)
-      {
-        if (command.Command == commandName)
-        {
-          return command;
-        }
-      }
-
-      return null;
-    }
-
-    public void ShowAvailableCommandsToPlayer(NwPlayer player)
-    {
-      IEnumerable<ICommand> availableCommands = GetAvailableCommands(player);
-      string message = commandHelpRenderer.GetCommandHelp(availableCommands);
-      player.SendServerMessage(message, ColorConstants.White);
-    }
-
-    public void ShowCommandHelpToPlayer(NwPlayer player, ICommand command)
-    {
-      string message = commandHelpRenderer.GetCommandHelp(command);
-      player.SendServerMessage(message, ColorConstants.White);
     }
 
     private void OnChatMessageSend(OnChatMessageSend eventData)
@@ -79,11 +43,13 @@ namespace Jorteck.Permissions
 
       if (eventData.Message == chatCommand)
       {
-        ShowAvailableCommandsToPlayer(player);
+        TryExecuteCommand(player, helpCommand, ImmutableArray<string>.Empty);
+        eventData.Skip = true;
       }
       else if (eventData.Message.StartsWith(chatCommand + " "))
       {
         TryProcessCommand(player, eventData.Message[(chatCommand.Length + 1)..]);
+        eventData.Skip = true;
       }
     }
 
@@ -94,6 +60,7 @@ namespace Jorteck.Permissions
         if (rawCommand == command.Command)
         {
           TryExecuteCommand(sender, command, ImmutableArray<string>.Empty);
+          return;
         }
       }
 
@@ -103,6 +70,7 @@ namespace Jorteck.Permissions
         {
           string[] args = GetArgs(rawCommand[command.Command.Length..]);
           TryExecuteCommand(sender, command, args);
+          return;
         }
       }
     }
@@ -119,15 +87,15 @@ namespace Jorteck.Permissions
       if (!permissionsService.HasPermission(sender, command.Permission))
       {
         ShowNoPermissionError(sender);
-        return;
       }
-
-      if (command.ArgCount.HasValue && command.ArgCount != args.Count)
+      else if (command.ArgCount.HasValue && command.ArgCount != args.Count)
       {
-        ShowCommandHelpToPlayer(sender, command);
+        TryExecuteCommand(sender, helpCommand, new[] { command.Command });
       }
-
-      command.ProcessCommand(sender, args);
+      else
+      {
+        command.ProcessCommand(sender, args);
+      }
     }
 
     private void ShowNoPermissionError(NwPlayer player)
