@@ -16,6 +16,7 @@ namespace Jorteck.Permissions
 
     private readonly List<ICommand> commands;
     private readonly HelpCommand helpCommand;
+    private readonly string helpCommandText;
 
     public PermissionsChatCommandService(PermissionsService permissionsService, PermissionsConfigService configService, IEnumerable<ICommand> commands, HelpCommand helpCommand)
     {
@@ -28,6 +29,7 @@ namespace Jorteck.Permissions
       this.configService = configService;
       this.commands = commands.ToList();
       this.helpCommand = helpCommand;
+      helpCommandText = $"{configService.Config.ChatCommand} {helpCommand.Command}".ColorString(ColorConstants.Orange);
 
       NwModule.Instance.OnChatMessageSend += OnChatMessageSend;
     }
@@ -48,19 +50,24 @@ namespace Jorteck.Permissions
       }
       else if (eventData.Message.StartsWith(chatCommand + " "))
       {
-        TryProcessCommand(player, eventData.Message[(chatCommand.Length + 1)..]);
+        bool validCommand = TryProcessCommand(player, eventData.Message[(chatCommand.Length + 1)..]);
         eventData.Skip = true;
+
+        if (!validCommand)
+        {
+          player.SendErrorMessage($"Unknown command. Type {helpCommandText} for help.");
+        }
       }
     }
 
-    private void TryProcessCommand(NwPlayer sender, string rawCommand)
+    private bool TryProcessCommand(NwPlayer sender, string rawCommand)
     {
       foreach (ICommand command in commands)
       {
         if (rawCommand == command.Command)
         {
           TryExecuteCommand(sender, command, ImmutableArray<string>.Empty);
-          return;
+          return true;
         }
       }
 
@@ -70,9 +77,11 @@ namespace Jorteck.Permissions
         {
           string[] args = GetArgs(rawCommand[command.Command.Length..]);
           TryExecuteCommand(sender, command, args);
-          return;
+          return true;
         }
       }
+
+      return false;
     }
 
     private string[] GetArgs(string rawArgs)
