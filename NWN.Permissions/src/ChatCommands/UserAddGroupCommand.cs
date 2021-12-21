@@ -11,7 +11,7 @@ namespace Jorteck.Permissions
   {
     private readonly ConfigService configService;
 
-    public string Command => "user addgroup";
+    public string Command => configService.GetFullChatCommand("user addgroup");
     public string Aliases => null;
 
     public Dictionary<string, object> UserData { get; } = new Dictionary<string, object>

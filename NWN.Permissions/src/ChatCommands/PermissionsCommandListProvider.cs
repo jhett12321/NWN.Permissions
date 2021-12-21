@@ -4,7 +4,7 @@ using Jorteck.ChatTools;
 
 namespace Jorteck.Permissions
 {
-  [ServiceBindingOptions(BindingPriority = BindingPriority.Low, PluginDependencies = new[] { "NWN.ChatCommands" })]
+  [ServiceBindingOptions(BindingPriority = BindingPriority.Low, PluginDependencies = new[] { "NWN.ChatTools" })]
   internal sealed class PermissionsCommandListProvider : CommandListProvider
   {
     private readonly PermissionsService permissionsService;

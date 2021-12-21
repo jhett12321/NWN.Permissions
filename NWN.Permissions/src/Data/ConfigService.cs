@@ -37,6 +37,16 @@ namespace Jorteck.Permissions
       LoadAllConfigsFromDisk();
     }
 
+    internal string GetFullChatCommand(string subCommand)
+    {
+      if (string.IsNullOrEmpty(Config?.ChatCommand))
+      {
+        return subCommand;
+      }
+
+      return Config.ChatCommand + " " + subCommand;
+    }
+
     internal PermissionSet GetPermissionsForPlayer(NwPlayer player)
     {
       if (!cachedPermissions.TryGetValue(player, out PermissionSet permissionSet))
@@ -220,17 +230,9 @@ namespace Jorteck.Permissions
     private T LoadConfig<T>(string fileName) where T : new()
     {
       string configPath = GetConfigPath(fileName);
-      T retVal;
 
-      if (!File.Exists(configPath))
-      {
-        retVal = new T();
-        SaveConfig(fileName, retVal);
-      }
-      else
-      {
-        retVal = deserializer.Deserialize<T>(File.ReadAllText(configPath));
-      }
+      T retVal = File.Exists(configPath) ? deserializer.Deserialize<T>(File.ReadAllText(configPath)) : new T();
+      SaveConfig(fileName, retVal);
 
       return retVal;
     }
