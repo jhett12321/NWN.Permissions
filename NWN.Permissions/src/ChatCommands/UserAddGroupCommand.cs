@@ -2,38 +2,40 @@ using System.Collections.Generic;
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
+using Jorteck.ChatTools;
 
 namespace Jorteck.Permissions
 {
-  [ServiceBinding(typeof(ICommand))]
-  internal class UserAddGroupCommand : ICommand
+  [ServiceBinding(typeof(IChatCommand))]
+  internal class UserAddGroupCommand : IChatCommand
   {
-    private readonly PermissionsConfigService permissionsConfigService;
+    private readonly ConfigService configService;
 
-    public string Command { get; }
-    public string Permission { get; }
-    public int? ArgCount { get; }
-    public string Description { get; }
-    public CommandUsage[] Usages { get; }
+    public string Command => "user addgroup";
+    public string Aliases => null;
 
-    public UserAddGroupCommand(PermissionsConfigService permissionsConfigService)
+    public Dictionary<string, object> UserData { get; } = new Dictionary<string, object>
     {
-      this.permissionsConfigService = permissionsConfigService;
+      [PermissionConstants.ChatUserDataKey] = PermissionConstants.UserAddGroup,
+    };
 
-      Command = "user addgroup";
-      Permission = PermissionConstants.UserAddGroup;
-      ArgCount = 1;
-      Description = "Adds a group membership to a user.";
-      Usages = new[]
-      {
-        new CommandUsage("<group_name>", "Add a player to the specified group."),
-      };
+    public int? ArgCount => 1;
+    public string Description => "Adds a group membership to a user.";
+
+    public CommandUsage[] Usages { get; } =
+    {
+      new CommandUsage("<group_name>", "Add a player to the specified group."),
+    };
+
+    public UserAddGroupCommand(ConfigService configService)
+    {
+      this.configService = configService;
     }
 
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
       string group = args[0];
-      if (!permissionsConfigService.GroupConfig.IsValidGroup(group))
+      if (!configService.GroupConfig.IsValidGroup(group))
       {
         caller.SendErrorMessage($"Invalid group \"{group}\".");
         return;
@@ -48,7 +50,7 @@ namespace Jorteck.Permissions
           return;
         }
 
-        permissionsConfigService.UpdateUserConfig(config =>
+        configService.UpdateUserConfig(config =>
         {
           if (!config.UsersCd.TryGetValue(player.CDKey, out UserEntry entry))
           {

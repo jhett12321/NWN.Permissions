@@ -7,12 +7,8 @@ namespace Jorteck.Permissions
   [ServiceBinding(typeof(PermissionsService))]
   public sealed class PermissionsService
   {
-    private readonly PermissionsConfigService permissionsConfigService;
-
-    public PermissionsService(PermissionsConfigService permissionsConfigService)
-    {
-      this.permissionsConfigService = permissionsConfigService;
-    }
+    [Inject]
+    private ConfigService ConfigService { get; init; }
 
     /// <summary>
     /// Gets if a player has the specified permission.
@@ -22,7 +18,7 @@ namespace Jorteck.Permissions
     /// <returns>True if the player has the specified permission, otherwise false.</returns>
     public bool HasPermission(NwPlayer player, string permission)
     {
-      PermissionSet permissionSet = permissionsConfigService.GetPermissionsForPlayer(player);
+      PermissionSet permissionSet = ConfigService.GetPermissionsForPlayer(player);
       if (permissionSet.Permissions.Contains(permission))
       {
         return true;
@@ -47,7 +43,7 @@ namespace Jorteck.Permissions
     /// <returns></returns>
     public IEnumerable<string> GetGroups(NwPlayer player, bool includeDefault = true)
     {
-      return permissionsConfigService.GetGroupsForPlayer(player, includeDefault);
+      return ConfigService.GetGroupsForPlayer(player, includeDefault);
     }
   }
 }

@@ -2,6 +2,11 @@ namespace Jorteck.Permissions
 {
   public static class PermissionConstants
   {
+    /// <summary>
+    /// The data key used for IChatCommand.UserData.
+    /// </summary>
+    public const string ChatUserDataKey = "permission";
+
     // /perms, /perms help
     public const string Help = "permissions.help";
 

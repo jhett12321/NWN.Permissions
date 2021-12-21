@@ -8,8 +8,8 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace Jorteck.Permissions
 {
-  [ServiceBinding(typeof(PermissionsConfigService))]
-  public sealed class PermissionsConfigService
+  [ServiceBinding(typeof(ConfigService))]
+  internal sealed class ConfigService
   {
     private readonly string pluginStoragePath;
 
@@ -18,6 +18,8 @@ namespace Jorteck.Permissions
       .Build();
 
     private readonly ISerializer serializer = new SerializerBuilder()
+      .WithTypeInspector(inner => new CommentGatheringTypeInspector(inner))
+      .WithEmissionPhaseObjectGraphVisitor(args => new CommentsObjectGraphVisitor(args.InnerVisitor))
       .WithNamingConvention(UnderscoredNamingConvention.Instance)
       .Build();
 
@@ -29,9 +31,9 @@ namespace Jorteck.Permissions
     internal GroupConfig GroupConfig;
     internal UserConfig UserConfig;
 
-    public PermissionsConfigService(PluginStorageService pluginStorageService)
+    public ConfigService(PluginStorageService pluginStorageService)
     {
-      pluginStoragePath = pluginStorageService.GetPluginStoragePath(typeof(PermissionsConfigService).Assembly);
+      pluginStoragePath = pluginStorageService.GetPluginStoragePath(typeof(ConfigService).Assembly);
       LoadAllConfigsFromDisk();
     }
 
