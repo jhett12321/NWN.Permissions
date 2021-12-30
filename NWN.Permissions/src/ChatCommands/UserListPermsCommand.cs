@@ -31,31 +31,34 @@ namespace Jorteck.Permissions
 
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
-      ListAllUserPermissionsOfSelectedTarget(caller);
+      caller.EnterTargetMode(eventData => ProcessEventOnValidPCTargetBy(eventData, caller, ListPermissionsOfTargetToCaller));
     }
 
-    private void ListAllUserPermissionsOfSelectedTarget(NwPlayer caller)
+    private void ProcessEventOnValidPCTargetBy(
+      ModuleEvents.OnPlayerTarget eventData,
+      NwPlayer caller,
+      Action<NwPlayer, NwPlayer> callback)
     {
-      caller.EnterTargetMode(OnCreatureSelection);
-
-      void OnCreatureSelection(ModuleEvents.OnPlayerTarget eventData)
+      if (eventData.IsCancelled)
       {
-        if (eventData.IsCancelled)
-        {
-          return;
-        }
-
-        if (!(eventData.TargetObject is NwCreature targetCreature &&
-              targetCreature.IsLoginPlayerCharacter(out NwPlayer targetPlayer)))
-        {
-          eventData.Player.SendErrorMessage("Target must be a player character.");
-          return;
-        }
-
-        PermissionSet userPermissions = ConfigService.GetPermissionsForPlayer(targetPlayer);
-        caller.SendServerMessage($"{targetPlayer.CDKey} ({targetCreature.Name}) has {(userPermissions.Permissions.Count == 0 ? "no permissions." : "the following permissions:")}", ColorConstants.White);
-        caller.SendServerMessage(String.Join("\n", userPermissions.Permissions), ColorConstants.White);
+        return;
       }
+
+      if (!(eventData.TargetObject is NwCreature targetCreature &&
+            targetCreature.IsLoginPlayerCharacter(out NwPlayer targetPlayer)))
+      {
+        eventData.Player.SendErrorMessage("Target must be a player character.");
+        return;
+      }
+
+      callback(targetPlayer, caller);
+    }
+
+    private void ListPermissionsOfTargetToCaller(NwPlayer target, NwPlayer caller)
+    {
+      PermissionSet userPermissions = ConfigService.GetPermissionsForPlayer(target);
+      caller.SendServerMessage($"{target.CDKey} ({target.LoginCreature.Name}) has {(userPermissions.Permissions.Count == 0 ? "no permissions." : "the following permissions:")}", ColorConstants.White);
+      caller.SendServerMessage(String.Join("\n", userPermissions.Permissions), ColorConstants.White);
     }
   }
 }
