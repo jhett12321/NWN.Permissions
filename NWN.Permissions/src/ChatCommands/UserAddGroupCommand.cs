@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Anvil.API;
 using Anvil.API.Events;
@@ -41,35 +42,32 @@ namespace Jorteck.Permissions
         return;
       }
 
-      caller.EnterTargetMode(OnCreatureSelection);
+      caller.EnterTargetMode(eventData => eventData.ProcessOnValidPCTargetBy(caller, AddUserGroupToTarget(group)));
+    }
 
-      void OnCreatureSelection(ModuleEvents.OnPlayerTarget eventData)
+    private Action<NwPlayer, NwPlayer> AddUserGroupToTarget(string group)
+    {
+      return (NwPlayer target, NwPlayer caller) =>
       {
-        if (eventData.IsCancelled || eventData.TargetObject.IsLoginPlayerCharacter(out NwPlayer player))
-        {
-          return;
-        }
-
         configService.UpdateUserConfig(config =>
         {
-          if (!config.UsersCd.TryGetValue(player.CDKey, out UserEntry entry))
+          if (!config.UsersCd.TryGetValue(target.CDKey, out UserEntry entry))
           {
             entry = new UserEntry();
-            config.UsersCd[player.CDKey] = entry;
+            config.UsersCd[target.CDKey] = entry;
           }
 
           if (entry.Groups.Contains(group))
           {
-            caller.SendErrorMessage($"{player.PlayerName} is already in group \"{group}\"");
+            caller.SendErrorMessage($"Target is already in group \"{group}\"");
             return;
           }
 
           entry.Groups ??= new List<string>();
           entry.Groups.Add(group);
-          caller.SendErrorMessage($"Added {player.PlayerName} to group \"{group}\"");
+          caller.SendErrorMessage($"Permission group granted: \"{group}\"");
         });
-      }
+      };
     }
   }
 }
-
