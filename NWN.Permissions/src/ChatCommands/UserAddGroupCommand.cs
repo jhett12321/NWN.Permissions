@@ -42,32 +42,32 @@ namespace Jorteck.Permissions
         return;
       }
 
-      caller.EnterTargetMode(eventData => eventData.ProcessOnValidPCTargetBy(caller, AddUserGroupToTarget(group)));
+      caller.EnterPlayerTargetMode(selection => AddUserGroupToTarget(selection, group));
     }
 
-    private Action<NwPlayer, NwPlayer> AddUserGroupToTarget(string group)
+    private void AddUserGroupToTarget(NwPlayerExtensions.PlayerTargetPlayerEvent selection, string group)
     {
-      return (NwPlayer target, NwPlayer caller) =>
+      var caller = selection.Caller;
+      var target = selection.Target;
+
+      configService.UpdateUserConfig(config =>
       {
-        configService.UpdateUserConfig(config =>
+        if (!config.UsersCd.TryGetValue(target.CDKey, out UserEntry entry))
         {
-          if (!config.UsersCd.TryGetValue(target.CDKey, out UserEntry entry))
-          {
-            entry = new UserEntry();
-            config.UsersCd[target.CDKey] = entry;
-          }
+          entry = new UserEntry();
+          config.UsersCd[target.CDKey] = entry;
+        }
 
-          if (entry.Groups.Contains(group))
-          {
-            caller.SendErrorMessage($"Target is already in group \"{group}\"");
-            return;
-          }
+        if (entry.Groups.Contains(group))
+        {
+          caller.SendErrorMessage($"Target is already in group \"{group}\"");
+          return;
+        }
 
-          entry.Groups ??= new List<string>();
-          entry.Groups.Add(group);
-          caller.SendErrorMessage($"Permission group granted: \"{group}\"");
-        });
-      };
+        entry.Groups ??= new List<string>();
+        entry.Groups.Add(group);
+        caller.SendErrorMessage($"Permission group granted: \"{group}\"");
+      });
     }
   }
 }

@@ -35,32 +35,32 @@ namespace Jorteck.Permissions
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
       string permission = args[0];
-      caller.EnterTargetMode(eventData => eventData.ProcessOnValidPCTargetBy(caller, AddUserPermissionToTarget(permission)));
+      caller.EnterPlayerTargetMode(selection => AddUserPermissionToTarget(selection, permission));
     }
 
-    private Action<NwPlayer, NwPlayer> AddUserPermissionToTarget(string permission)
+    private void AddUserPermissionToTarget(NwPlayerExtensions.PlayerTargetPlayerEvent selection, string permission)
     {
-      return (NwPlayer target, NwPlayer caller) =>
+      var caller = selection.Caller;
+      var target = selection.Target;
+
+      configService.UpdateUserConfig(config =>
       {
-        configService.UpdateUserConfig(config =>
+        if (!config.UsersCd.TryGetValue(target.CDKey, out UserEntry entry))
         {
-          if (!config.UsersCd.TryGetValue(target.CDKey, out UserEntry entry))
-          {
-            entry = new UserEntry();
-            config.UsersCd[target.CDKey] = entry;
-          }
+          entry = new UserEntry();
+          config.UsersCd[target.CDKey] = entry;
+        }
 
-          if (entry.Permissions.Contains(permission))
-          {
-            caller.SendErrorMessage($"Target already has permission \"{permission}\"");
-            return;
-          }
+        if (entry.Permissions.Contains(permission))
+        {
+          caller.SendErrorMessage($"Target already has permission \"{permission}\"");
+          return;
+        }
 
-          entry.Permissions ??= new List<string>();
-          entry.Permissions.Add(permission);
-          caller.SendServerMessage($"Permission granted: \"{permission}\"", ColorConstants.Lime);
-        });
-      };
+        entry.Permissions ??= new List<string>();
+        entry.Permissions.Add(permission);
+        caller.SendServerMessage($"Permission granted: \"{permission}\"", ColorConstants.Lime);
+      });
     }
   }
 }

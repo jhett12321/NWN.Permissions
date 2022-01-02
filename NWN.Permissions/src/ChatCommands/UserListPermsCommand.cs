@@ -30,11 +30,14 @@ namespace Jorteck.Permissions
 
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
-      caller.EnterTargetMode(eventData => eventData.ProcessOnValidPCTargetBy(caller, ListPermissionsOfTargetToCaller));
+      caller.EnterPlayerTargetMode(ListPermissionsOfTarget);
     }
 
-    private void ListPermissionsOfTargetToCaller(NwPlayer target, NwPlayer caller)
+    private void ListPermissionsOfTarget(NwPlayerExtensions.PlayerTargetPlayerEvent selection)
     {
+      var caller = selection.Caller;
+      var target = selection.Target;
+
       PermissionSet userPermissions = ConfigService.GetPermissionsForPlayer(target);
       caller.SendServerMessage($"Target has {(userPermissions.Permissions.Count == 0 ? "no permissions." : "the following permissions:")}", ColorConstants.Orange);
       caller.SendServerMessage(String.Join("\n", userPermissions.Permissions), ColorConstants.Lime);
