@@ -9,9 +9,9 @@ namespace Jorteck.Permissions
   internal class UserAddPermissionCommand : IChatCommand
   {
     [Inject]
-    private ConfigService configService { get; init; }
+    private ConfigService ConfigService { get; init; }
 
-    public string Command => configService.GetFullChatCommand("user addpermission");
+    public string Command => ConfigService.GetFullChatCommand("user addpermission");
     public string[] Aliases => null;
 
     public Dictionary<string, object> UserData { get; } = new Dictionary<string, object>
@@ -27,8 +27,6 @@ namespace Jorteck.Permissions
       new CommandUsage("<permission_name>", "Grant the specified permission to the target user."),
     };
 
-    public UserAddPermissionCommand() { }
-
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
       string permission = args[0];
@@ -37,10 +35,10 @@ namespace Jorteck.Permissions
 
     private void AddUserPermissionToTarget(NwPlayerExtensions.PlayerTargetPlayerEvent selection, string permission)
     {
-      var caller = selection.Caller;
-      var target = selection.Target;
+      NwPlayer caller = selection.Caller;
+      NwPlayer target = selection.Target;
 
-      configService.UpdateUserConfig(config =>
+      ConfigService.UpdateUserConfig(config =>
       {
         if (!config.UsersCd.TryGetValue(target.CDKey, out UserEntry entry))
         {

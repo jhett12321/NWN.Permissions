@@ -13,6 +13,7 @@ namespace Jorteck.Permissions
       {
         return $"{gameObject.Name.StripColors()} ({player.PlayerName}, {player.CDKey})";
       }
+
       return $"{gameObject.Name.StripColors()}";
     }
 
@@ -30,9 +31,9 @@ namespace Jorteck.Permissions
 
         if (eventData.TargetObject is NwCreature targetCreature && targetCreature.IsLoginPlayerCharacter(out NwPlayer target))
         {
-          var caller = eventData.Player;
+          NwPlayer caller = eventData.Player;
           caller.SendServerMessage($"Target: {targetCreature.GetObjectNameWithAccountNameAndCDKey()}", ColorConstants.Pink);
-          callback?.Invoke(new PlayerTargetPlayerEvent(caller: caller, target: target));
+          callback?.Invoke(new PlayerTargetPlayerEvent(caller, target));
         }
         else
         {

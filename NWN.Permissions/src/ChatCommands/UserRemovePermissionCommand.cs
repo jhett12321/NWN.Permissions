@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Anvil.API;
 using Anvil.Services;
@@ -10,9 +9,9 @@ namespace Jorteck.Permissions
   internal class UserRemovePermissionCommand : IChatCommand
   {
     [Inject]
-    private ConfigService configService { get; init; }
+    private ConfigService ConfigService { get; init; }
 
-    public string Command => configService.GetFullChatCommand("user removepermission");
+    public string Command => ConfigService.GetFullChatCommand("user removepermission");
     public string[] Aliases => null;
 
     public Dictionary<string, object> UserData { get; } = new Dictionary<string, object>
@@ -28,8 +27,6 @@ namespace Jorteck.Permissions
       new CommandUsage("<permission_name>", "Remove the specified permission from the target user."),
     };
 
-    public UserRemovePermissionCommand() { }
-
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
       string permission = args[0];
@@ -38,10 +35,10 @@ namespace Jorteck.Permissions
 
     private void RemoveUserPermissionFromTarget(NwPlayerExtensions.PlayerTargetPlayerEvent selection, string permission)
     {
-      var caller = selection.Caller;
-      var target = selection.Target;
+      NwPlayer caller = selection.Caller;
+      NwPlayer target = selection.Target;
 
-      configService.UpdateUserConfig(config =>
+      ConfigService.UpdateUserConfig(config =>
       {
         if (!config.UsersCd.TryGetValue(target.CDKey, out UserEntry entry))
         {
