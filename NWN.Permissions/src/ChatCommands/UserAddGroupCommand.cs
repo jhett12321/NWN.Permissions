@@ -10,7 +10,8 @@ namespace Jorteck.Permissions
   [ServiceBinding(typeof(IChatCommand))]
   internal class UserAddGroupCommand : IChatCommand
   {
-    private readonly ConfigService configService;
+    [Inject]
+    private ConfigService configService { get; init; }
 
     public string Command => configService.GetFullChatCommand("user addgroup");
     public string[] Aliases => null;
@@ -28,10 +29,7 @@ namespace Jorteck.Permissions
       new CommandUsage("<group_name>", "Add a player to the specified group."),
     };
 
-    public UserAddGroupCommand(ConfigService configService)
-    {
-      this.configService = configService;
-    }
+    public UserAddGroupCommand() { }
 
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {

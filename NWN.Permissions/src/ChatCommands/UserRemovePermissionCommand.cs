@@ -9,7 +9,8 @@ namespace Jorteck.Permissions
   [ServiceBinding(typeof(IChatCommand))]
   internal class UserRemovePermissionCommand : IChatCommand
   {
-    private readonly ConfigService configService;
+    [Inject]
+    private ConfigService configService { get; init; }
 
     public string Command => configService.GetFullChatCommand("user removepermission");
     public string[] Aliases => null;
@@ -27,10 +28,7 @@ namespace Jorteck.Permissions
       new CommandUsage("<permission_name>", "Remove the specified permission from the target user."),
     };
 
-    public UserRemovePermissionCommand(ConfigService configService)
-    {
-      this.configService = configService;
-    }
+    public UserRemovePermissionCommand() { }
 
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {

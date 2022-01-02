@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Anvil.API;
 using Anvil.Services;
@@ -9,7 +8,8 @@ namespace Jorteck.Permissions
   [ServiceBinding(typeof(IChatCommand))]
   internal class UserAddPermissionCommand : IChatCommand
   {
-    private readonly ConfigService configService;
+    [Inject]
+    private ConfigService configService { get; init; }
 
     public string Command => configService.GetFullChatCommand("user addpermission");
     public string[] Aliases => null;
@@ -27,10 +27,7 @@ namespace Jorteck.Permissions
       new CommandUsage("<permission_name>", "Grant the specified permission to the target user."),
     };
 
-    public UserAddPermissionCommand(ConfigService configService)
-    {
-      this.configService = configService;
-    }
+    public UserAddPermissionCommand() { }
 
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
