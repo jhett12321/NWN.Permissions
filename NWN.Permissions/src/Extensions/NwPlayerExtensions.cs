@@ -1,12 +1,16 @@
 using System;
 using Anvil.API;
 using Anvil.API.Events;
-using Jorteck.ChatTools;
 
 namespace Jorteck.Permissions
 {
   internal static class NwPlayerExtensions
   {
+    internal static void SendErrorMessage(this NwPlayer player, string message)
+    {
+      player.SendServerMessage(message, ColorConstants.Red);
+    }
+
     private static string GetObjectNameWithAccountNameAndCDKey(this NwObject gameObject)
     {
       if (gameObject.IsPlayerControlled(out NwPlayer player))
