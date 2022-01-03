@@ -10,6 +10,9 @@ namespace Jorteck.Permissions
     // /perms, /perms help
     public const string Help = "permissions.help";
 
+    // /perms list
+    public const string List = "permissions.user.listpermissions";
+
     // /perms user addgroup
     public const string UserAddGroup = "permissions.user.group.add";
 

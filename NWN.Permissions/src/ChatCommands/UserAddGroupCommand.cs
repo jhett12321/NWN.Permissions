@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Anvil.API;
-using Anvil.API.Events;
 using Anvil.Services;
 using Jorteck.ChatTools;
 
@@ -9,9 +8,10 @@ namespace Jorteck.Permissions
   [ServiceBinding(typeof(IChatCommand))]
   internal class UserAddGroupCommand : IChatCommand
   {
-    private readonly ConfigService configService;
+    [Inject]
+    private ConfigService ConfigService { get; init; }
 
-    public string Command => configService.GetFullChatCommand("user addgroup");
+    public string Command => ConfigService.GetFullChatCommand("user addgroup");
     public string[] Aliases => null;
 
     public Dictionary<string, object> UserData { get; } = new Dictionary<string, object>
@@ -27,49 +27,41 @@ namespace Jorteck.Permissions
       new CommandUsage("<group_name>", "Add a player to the specified group."),
     };
 
-    public UserAddGroupCommand(ConfigService configService)
-    {
-      this.configService = configService;
-    }
-
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
       string group = args[0];
-      if (!configService.GroupConfig.IsValidGroup(group))
+      if (!ConfigService.GroupConfig.IsValidGroup(group))
       {
         caller.SendErrorMessage($"Invalid group \"{group}\".");
         return;
       }
 
-      caller.EnterTargetMode(OnCreatureSelection);
+      caller.EnterPlayerTargetMode(selection => AddUserGroupToTarget(selection, group));
+    }
 
-      void OnCreatureSelection(ModuleEvents.OnPlayerTarget eventData)
+    private void AddUserGroupToTarget(NwPlayerExtensions.PlayerTargetPlayerEvent selection, string group)
+    {
+      NwPlayer caller = selection.Caller;
+      NwPlayer target = selection.Target;
+
+      ConfigService.UpdateUserConfig(config =>
       {
-        if (eventData.IsCancelled || eventData.TargetObject.IsLoginPlayerCharacter(out NwPlayer player))
+        if (!config.UsersCd.TryGetValue(target.CDKey, out UserEntry entry))
         {
+          entry = new UserEntry();
+          config.UsersCd[target.CDKey] = entry;
+        }
+
+        if (entry.Groups.Contains(group))
+        {
+          caller.SendErrorMessage($"Target is already in group \"{group}\"");
           return;
         }
 
-        configService.UpdateUserConfig(config =>
-        {
-          if (!config.UsersCd.TryGetValue(player.CDKey, out UserEntry entry))
-          {
-            entry = new UserEntry();
-            config.UsersCd[player.CDKey] = entry;
-          }
-
-          if (entry.Groups.Contains(group))
-          {
-            caller.SendErrorMessage($"{player.PlayerName} is already in group \"{group}\"");
-            return;
-          }
-
-          entry.Groups ??= new List<string>();
-          entry.Groups.Add(group);
-          caller.SendErrorMessage($"Added {player.PlayerName} to group \"{group}\"");
-        });
-      }
+        entry.Groups ??= new List<string>();
+        entry.Groups.Add(group);
+        caller.SendErrorMessage($"Permission group granted: \"{group}\"");
+      });
     }
   }
 }
-
