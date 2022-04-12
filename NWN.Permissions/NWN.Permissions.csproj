@@ -58,8 +58,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NWN.Anvil" Version="8193.34.2" ExcludeAssets="runtime" PrivateAssets="all" />
-    <PackageReference Include="NWN.ChatTools" Version="8193.34.0-dev.18.8e3f9af" ExcludeAssets="runtime" PrivateAssets="all" />
+    <PackageReference Include="NWN.Anvil" Version="8193.34.3" ExcludeAssets="runtime" PrivateAssets="all" />
+    <PackageReference Include="NWN.ChatTools" Version="8193.34.0" ExcludeAssets="runtime" PrivateAssets="all" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" PrivateAssets="compile" />
   </ItemGroup>
 
